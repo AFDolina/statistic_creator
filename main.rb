@@ -18,10 +18,11 @@ class StatisticCreator
   include Part::Referer
   include Part::Activities
 
-  def initialize(d=Date.today)
+  def initialize(company_id, d=Date.today)
+    @company_id = company_id
     @date = (d.instance_of? Date) ? d : Date.parse(d)
-    project = ENV['project'].nil? ? 'bz' : ENV['project']
-    class_conf = YAML.load_file("config/#{project}.yml")
+    stand = ARGV[1]
+    class_conf = YAML.load_file("config/#{stand}.yml")
   end
 
   def beginning_of_month(date)
@@ -38,7 +39,7 @@ class StatisticCreator
   end
 
   def referers(hash={})
-    return if hash[:company_id].nil?
+    hash[:company_id] = @company_id if hash[:company_id].nil?
 
     hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))
     hash[:pages] = 1 if hash[:pages].nil?
@@ -62,7 +63,7 @@ class StatisticCreator
   end
 
   def pages(hash={})
-    return if hash[:company_id].nil?
+    hash[:company_id] = @company_id if hash[:company_id].nil?
     return if hash[:page].nil?
 
     hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))
@@ -87,7 +88,7 @@ class StatisticCreator
 
 
   def activities(hash={})
-    return if hash[:company_id].nil?
+    hash[:company_id] = @company_id if hash[:company_id].nil?
     return if hash[:action].nil?
 
     hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))

@@ -3,28 +3,32 @@ module Part
     def spot_source(referer)
       source = Hash.new
 
-      r1 = Regexp.new('\\w*#{class_conf[project]}.\\w+')
-      r2 = Regexp.new('\\w*yandex.\\w+')
-      r3 = Regexp.new('\\w*google.\\w+')
-      r4 = Regexp.new('\\w*mail.\\w+')
-      r5 = Regexp.new('\\w*yahoo.\\w+')
-      r7 = Regexp.new('\\w*#{class_conf[company_url]}.\\w+')
+      a = 0 if !(referer =~ Regexp.new('\\w*#{class_conf[company_slug]}.#{class_conf[stand_link]\\w+')).nil?
+      a = 1 if !(referer =~ Regexp.new('\\w*www.#{class_conf[project]}.\\w+')).nil?
+      a = 2 if !(referer =~ Regexp.new('\\w*yandex.\\w+')).nil?
+      a = 3 if !(referer =~ Regexp.new('\\w*google.\\w+')).nil?
+      a = 4 if !(referer =~ Regexp.new('\\w*mail.\\w+')).nil?
+      a = 5 if !(referer =~ Regexp.new('\\w*yahoo.\\w+')).nil?
+      a = 7 if !(referer =~ Regexp.new('\\w*#{class_conf[company_slug]}.#{class_conf[stand_link]}.\\w+')).nil?
 
-      if !(referer =~ r1).nil?
-        source = {source_id: 1, is_internal: true}
-      elseif !(referer =~ r2).nil?
-        source = {source_id: 2, is_internal: false}
-      elseif !(referer =~ r3).nil?
-        source = {source_id: 3, is_internal: false}
-      elseif !(referer =~ r4).nil?
-        source = {source_id: 4, is_internal: false}
-      elseif !(referer =~ r5).nil?
-        source = {source_id: 5, is_internal: false}
-      elseif !(referer =~ r7).nil?
-        source = {source_id: 7, is_internal: true}
-      else
-        source = {source_id: 8, is_internal: false}
-      end
+      case a
+        when 0
+          source = {source_id: 0, is_internal: true}
+        when 1
+          source = {source_id: 1, is_internal: true}
+        when 2
+          source = {source_id: 2, is_internal: false}
+        when 3
+          source = {source_id: 3, is_internal: false}
+        when 4
+          source = {source_id: 4, is_internal: false}
+        when 5
+          source = {source_id: 5, is_internal: false}
+        when 7
+          source = {source_id: 7, is_internal: true}
+        else
+          source = {source_id: 8, is_internal: false}
+        end
       return source
     end
 

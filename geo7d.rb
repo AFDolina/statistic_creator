@@ -1,15 +1,4 @@
-# referers
-# String                 | source_id | is_internal
-# blizko                 | 1         | true
-# yandex                 | 2         | false
-# google                 | 3         | false
-# mail                   | 4         | false
-# др.поисковая система   | 5         | false
-#                        | 6         | false
-# Внутренний переход     | 7         | true
-# Прямой переход         | 8         | false
-#
-# run: "ruby sc1.rb 12345 bz3 2.10.2016"
+# run: "ruby geo7d.rb 12345 bz3 2.10.2016"
 
 require 'yaml'
 require_relative 'lib/controller.rb'

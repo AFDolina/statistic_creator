@@ -22,4 +22,8 @@
  ```
  ruby all.rb 123 local 2016-12-05
  ```
- 
+## Типичные проблемы
+ ```
+ Inserted data is out of range. Fix statistics.company_statistic_pages_by_months_insert_trigger. (ActiveRecord::StatementInvalid)
+ ``` 
+ Нужно добавить партиции: см. Подготовка к запуску - Создать партиции

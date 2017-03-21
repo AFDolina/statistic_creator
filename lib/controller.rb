@@ -1,22 +1,27 @@
 require 'yaml'
 require 'date'
 
-require_relative 'lib/connection.rb'
+require_relative 'connection.rb'
 
-require_relative 'lib/models/activities.rb'
-require_relative 'lib/models/geo.rb'
-require_relative 'lib/models/pages.rb'
-require_relative 'lib/models/referers.rb'
-require_relative 'lib/models/total.rb'
+require_relative 'models/activities.rb'
+require_relative 'models/geo.rb'
+require_relative 'models/pages.rb'
+require_relative 'models/referers.rb'
+require_relative 'models/total.rb'
 
-require_relative 'lib/parts/pages.rb'
-require_relative 'lib/parts/referers.rb'
-require_relative 'lib/parts/activities.rb'
+require_relative 'parts/pages.rb'
+require_relative 'parts/referers.rb'
+require_relative 'parts/activities.rb'
+require_relative 'parts/totals.rb'
+require_relative 'parts/geo.rb'
+
 
 class StatisticCreator
   include Part::Page
   include Part::Referer
   include Part::Activities
+  include Part::Total
+  include Part::Geo
 
   def initialize(company_id, d=Date.today)
     @company_id = company_id
@@ -119,9 +124,54 @@ class StatisticCreator
     atotal.empty? ? (create_activities_stat('Total', hash)) : (update_activities_stat('Total', atotal.first.id, hash))
   end
 
-  def create_total_stat
+  def totals(hash={})
+    hash[:company_id] = @company_id if hash[:company_id].nil?
+    hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))
+    hash[:pages] = 1 if hash[:pages].nil?
+    hash[:visits] = 1 if hash[:visits].nil?
+    hash[:yml_hits] = 1 if hash[:yml_hits].nil?
+    hash[:beginning_of_month] = beginning_of_month(hash[:date]) if hash[:beginning_of_month].nil?
+    week_parameters(hash[:date]).each {|key, value| hash[key] = value} if hash[:first_week_day].nil?
+
+    tmonths = TotalByMonth.where(company_id: hash[:company_id],
+                        date: hash[:beginning_of_month])
+    tmonths.empty? ? (create_totals_stat('Month', hash)) : (update_totals_stat('Month', tmonths.first.id, hash))
+
+    tweeks = TotalByWeek.where(company_id: hash[:company_id],
+                        first_week_day: hash[:first_week_day],
+                        last_week_day: hash[:last_week_day],
+                        year: hash[:year],
+                        week: hash[:week])
+    tweeks.empty? ? (create_totals_stat('Week', hash)) : (update_totals_stat('Week', tweeks.first.id, hash))
+
+    tday = TotalByDay.where(company_id: hash[:company_id],
+                        date: hash[:date])
+    tday.empty? ? (create_totals_stat('Day', hash)) : (update_totals_stat('Day', tday.first.id, hash))
+
+    ttotal = Totals.where(company_id: hash[:company_id])
+    ttotal.empty? ? (create_totals_stat('Total', hash)) : (update_totals_stat('Total', ttotal.first.id, hash))
   end
 
-  def create_geo_stat
+  def geo(hash={})
+    hash[:company_id] = @company_id if hash[:company_id].nil?
+    hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))
+    hash[:pages] = 1 if hash[:pages].nil?
+    hash[:visits] = 1 if hash[:visits].nil?
+    hash[:city_id] = 10270 if hash[:city_id].nil?
+    hash[:beginning_of_month] = beginning_of_month(hash[:date]) if hash[:beginning_of_month].nil?
+    week_parameters(hash[:date]).each {|key, value| hash[key] = value} if hash[:first_week_day].nil?
+
+    gmonths = GeoByMonth.where(company_id: hash[:company_id],
+                        city_id: hash[:city_id],
+                        date: hash[:beginning_of_month])
+    gmonths.empty? ? (create_geo_stat('Month', hash)) : (update_geo_stat('Month', gmonths.first.id, hash))
+
+    gweeks = GeoByWeek.where(company_id: hash[:company_id],
+                        first_week_day: hash[:first_week_day],
+                        last_week_day: hash[:last_week_day],
+                        year: hash[:year],
+                        week: hash[:week],
+                        city_id: hash[:city_id])
+    gweeks.empty? ? (create_geo_stat('Week', hash)) : (update_geo_stat('Week', gweeks.first.id, hash))
   end
 end

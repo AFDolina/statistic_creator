@@ -45,6 +45,10 @@ referers = [
   {referer: '', source_id: 8}
 ]
 
+dates.each do |date|
+  referers.push({date: date, referer: '', source_id: 8})
+end
+
 referers.each do |hash|
   s.referers(hash)
 end

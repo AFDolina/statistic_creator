@@ -26,7 +26,7 @@ i = 0
 dates.each do |date|
   activities.each do |activ|
     i += 1
-    act.push({action: activ, date: date, value: i})
+    act.push({action: activ, date: date})
   end
 end
 

@@ -4,7 +4,7 @@ cs_listing_slug: "tovary"
 p_listing_slug: "predl"
 
 
-activities: ['phone_hits']
+activities: ['phone_hits','slider_views','slide_hits']
 
 project: "blizko"
 stand_link: "test-blizko.ru"

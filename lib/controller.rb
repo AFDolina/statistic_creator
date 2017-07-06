@@ -28,6 +28,7 @@ class StatisticCreator
     @date = (d.instance_of? Date) ? d : Date.parse(d)
     stand = ARGV[1]
     class_conf = YAML.load_file("config/#{stand}.yml")
+    @rnd = Random.new
   end
 
   def beginning_of_month(date)
@@ -47,7 +48,7 @@ class StatisticCreator
     hash[:company_id] = @company_id if hash[:company_id].nil?
 
     hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))
-    hash[:pages] = 1 if hash[:pages].nil?
+    hash[:pages] = @rnd.rand(30) if hash[:pages].nil?
     hash[:beginning_of_month] = beginning_of_month(hash[:date]) if hash[:beginning_of_month].nil?
     week_parameters(hash[:date]).each {|key, value| hash[key] = value} if hash[:first_week_day].nil?
 
@@ -72,7 +73,7 @@ class StatisticCreator
     return if hash[:page].nil?
 
     hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))
-    hash[:pages] = 1 if hash[:pages].nil?
+    hash[:pages] = @rnd.rand(30) if hash[:pages].nil?
     hash[:beginning_of_month] = beginning_of_month(hash[:date]) if hash[:beginning_of_month].nil?
     week_parameters(hash[:date]).each {|key, value| hash[key] = value} if hash[:first_week_day].nil?
 
@@ -97,7 +98,7 @@ class StatisticCreator
     return if hash[:action].nil?
 
     hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))
-    hash[:value] = 1 if hash[:value].nil?
+    hash[:value] = @rnd.rand(30) if hash[:value].nil?
     hash[:beginning_of_month] = beginning_of_month(hash[:date]) if hash[:beginning_of_month].nil?
     week_parameters(hash[:date]).each {|key, value| hash[key] = value} if hash[:first_week_day].nil?
 
@@ -127,9 +128,9 @@ class StatisticCreator
   def totals(hash={})
     hash[:company_id] = @company_id if hash[:company_id].nil?
     hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))
-    hash[:pages] = 1 if hash[:pages].nil?
-    hash[:visits] = 1 if hash[:visits].nil?
-    hash[:yml_hits] = 1 if hash[:yml_hits].nil?
+    hash[:pages] = @rnd.rand(30) if hash[:pages].nil?
+    hash[:visits] = @rnd.rand(20) if hash[:visits].nil?
+    hash[:yml_hits] = @rnd.rand(10) if hash[:yml_hits].nil?
     hash[:beginning_of_month] = beginning_of_month(hash[:date]) if hash[:beginning_of_month].nil?
     week_parameters(hash[:date]).each {|key, value| hash[key] = value} if hash[:first_week_day].nil?
 
@@ -155,8 +156,8 @@ class StatisticCreator
   def geo(hash={})
     hash[:company_id] = @company_id if hash[:company_id].nil?
     hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))
-    hash[:pages] = 1 if hash[:pages].nil?
-    hash[:visits] = 1 if hash[:visits].nil?
+    hash[:pages] = @rnd.rand(30) if hash[:pages].nil?
+    hash[:visits] = @rnd.rand(20) if hash[:visits].nil?
     hash[:city_id] = 10270 if hash[:city_id].nil?
     hash[:beginning_of_month] = beginning_of_month(hash[:date]) if hash[:beginning_of_month].nil?
     week_parameters(hash[:date]).each {|key, value| hash[key] = value} if hash[:first_week_day].nil?

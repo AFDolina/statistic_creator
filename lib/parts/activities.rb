@@ -6,7 +6,8 @@ module Part
         ActivitiesByMonth.create(company_id: hash[:company_id],
                                 date: hash[:beginning_of_month],
                                 value: hash[:value],
-                                action: hash[:action])
+                                action: hash[:action],
+                                payload: hash[:payload])
       when 'Week'
         ActivitiesByWeek.create(company_id: hash[:company_id],
                                 first_week_day: hash[:first_week_day],
@@ -14,16 +15,19 @@ module Part
                                 year: hash[:year],
                                 week: hash[:week],
                                 value: hash[:value],
-                                action: hash[:action])
+                                action: hash[:action],
+                                payload: hash[:payload])
       when 'Day'
         ActivitiesByDay.create(company_id: hash[:company_id],
                                 date: hash[:date],
                                 value: hash[:value],
-                                action: hash[:action])
+                                action: hash[:action],
+                                payload: hash[:payload])
       when 'Total'
         ActivitiesTotal.create(company_id: hash[:company_id],
                                 value: hash[:value],
-                                action: hash[:action])
+                                action: hash[:action],
+                                payload: hash[:payload])
       end
     end
 

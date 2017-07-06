@@ -16,7 +16,7 @@ s = StatisticCreator.new(company_id, date)
 #создаем список дат
 dates = []
 for i in 0..8 do
-  dates.push(date - (i*7))
+  dates.push(date - (i*3))
 end
 
 #создаем список хешей, для передачи в методы создающие записи в базе

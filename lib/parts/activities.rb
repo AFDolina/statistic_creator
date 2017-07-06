@@ -26,8 +26,7 @@ module Part
       when 'Total'
         ActivitiesTotal.create(company_id: hash[:company_id],
                                 value: hash[:value],
-                                action: hash[:action],
-                                payload: hash[:payload])
+                                action: hash[:action])
       end
     end
 

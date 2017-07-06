@@ -129,8 +129,7 @@ class StatisticCreator
     aday.empty? ? (create_activities_stat('Day', hash)) : (update_activities_stat('Day', aday.first.id, hash))
 
     atotal = ActivitiesTotal.where(company_id: hash[:company_id],
-                        action: hash[:action],
-                        payload: hash[:payload])
+                        action: hash[:action])
     atotal.empty? ? (create_activities_stat('Total', hash)) : (update_activities_stat('Total', atotal.first.id, hash))
   end
 

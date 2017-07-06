@@ -99,12 +99,18 @@ class StatisticCreator
 
     hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))
     hash[:value] = @rnd.rand(30) if hash[:value].nil?
+    if hash[:payload].nil? && hash[:action] == 'slide_hits'
+      hash[:payload] = "http://#{CONFIG['company_slug']}.#{CONFIG['stand_link']}.ru/link_to_page#{@rnd.rand(5)}"
+    else
+      hash[:payload] = nil
+    end
     hash[:beginning_of_month] = beginning_of_month(hash[:date]) if hash[:beginning_of_month].nil?
     week_parameters(hash[:date]).each {|key, value| hash[key] = value} if hash[:first_week_day].nil?
 
     amonths = ActivitiesByMonth.where(company_id: hash[:company_id],
                         action: hash[:action],
-                        date: hash[:beginning_of_month])
+                        date: hash[:beginning_of_month],
+                        payload: hash[:payload])
     amonths.empty? ? (create_activities_stat('Month', hash)) : (update_activities_stat('Month', amonths.first.id, hash))
 
     aweeks = ActivitiesByWeek.where(company_id: hash[:company_id],
@@ -112,16 +118,19 @@ class StatisticCreator
                         last_week_day: hash[:last_week_day],
                         year: hash[:year],
                         week: hash[:week],
-                        action: hash[:action])
+                        action: hash[:action],
+                        payload: hash[:payload])
     aweeks.empty? ? (create_activities_stat('Week', hash)) : (update_activities_stat('Week', aweeks.first.id, hash))
 
     aday = ActivitiesByDay.where(company_id: hash[:company_id],
                         action: hash[:action],
-                        date: hash[:date])
+                        date: hash[:date],
+                        payload: hash[:payload])
     aday.empty? ? (create_activities_stat('Day', hash)) : (update_activities_stat('Day', aday.first.id, hash))
 
     atotal = ActivitiesTotal.where(company_id: hash[:company_id],
-                        action: hash[:action])
+                        action: hash[:action],
+                        payload: hash[:payload])
     atotal.empty? ? (create_activities_stat('Total', hash)) : (update_activities_stat('Total', atotal.first.id, hash))
   end
 

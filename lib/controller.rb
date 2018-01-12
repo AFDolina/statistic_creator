@@ -100,7 +100,7 @@ class StatisticCreator
     hash[:date] = hash[:date].nil? ? @date : ((hash[:date].instance_of? Date) ? hash[:date] : Date.parse(hash[:date]))
     hash[:value] = @rnd.rand(30) if hash[:value].nil?
     if hash[:payload].nil? && hash[:action] == 'slide_hits'
-      hash[:payload] = "http://#{CONFIG['company_slug']}.#{CONFIG['stand_link']}.ru/link_to_page#{@rnd.rand(5)}"
+      hash[:payload] = "http://#{CONFIG['company_slug']}.#{CONFIG['stand_link']}/link_to_page#{@rnd.rand(5)}"
     else
       hash[:payload] = nil
     end
